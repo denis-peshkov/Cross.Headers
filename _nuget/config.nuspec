@@ -10,9 +10,9 @@
     <description>ASP.NET Core middleware boilerplate for handling correlation id, security headers and user context based on configuration and OpenIdConnect authentication.</description>
     <tags>.NET ASP.NET ASP.NETCore Middleware Headers Security CorrelationId CSP OpenIdConnect Configuration</tags>
     <icon>icon.png</icon>
-    <readme>README</readme>
+    <readme>README.md</readme>
     <copyright>Copyright Denis Peshkov</copyright>
-    <license type="file">LICENSE.md</license>
+    <license type="file">LICENSE</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Microsoft.AspNetCore.Authentication.OpenIdConnect" version="7.0.20" />
