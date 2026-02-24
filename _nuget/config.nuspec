@@ -12,7 +12,7 @@
     <icon>icon.png</icon>
     <readme>README.md</readme>
     <copyright>Copyright Denis Peshkov</copyright>
-    <license type="file">LICENSE</license>
+    <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
       <dependency id="Microsoft.AspNetCore.Authentication.OpenIdConnect" version="7.0.20" />
@@ -22,7 +22,6 @@
   <files>
     <file src="..\Cross.Headers\bin\Release\net7.0\Cross.Headers*.*" target="lib\net7.0" />
     <file src="..\Cross.Headers\bin\Release\net8.0\Cross.Headers*.*" target="lib\net8.0" />
-    <file src="..\LICENSE" target="" />
     <file src="..\README.md" target="" />
     <file src="..\icon.png" target="" />
   </files>
