@@ -1,0 +1,21 @@
+﻿<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path=".github\workflows\dotnet.yml" />
+  </Folder>
+  <Folder Name="/assets/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="GitVersion.yml" />
+    <File Path="icon.png" />
+    <File Path="icon.svg" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="ReleaseNotes.txt" />
+  </Folder>
+  <Folder Name="/_nuget/">
+    <File Path="_nuget\config.nuspec" />
+  </Folder>
+  <Project Path="Cross.Headers\Cross.Headers.csproj" />
+</Solution>

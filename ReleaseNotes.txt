@@ -1,0 +1,102 @@
+0.1.0 - 01 Sep 2021s
+Initial version.
+
+0.2.0 - 01 Jan 2022
+Added NetStandard 2.0 targeted libraries.
+
+0.3.0 - 23 Aug 2022
+Bugfixes.
+
+0.4.0 - 12 May 2023
+Package updates.
+
+0.5.0 - 2 June 2023
+Added Net 6.0 targeted libraries.
+
+0.6.0 - 4 July 2023
+Added Net 7.0 targeted libraries.
+
+1.0.0 - 31 Oct 2023
+Release.
+
+1.0.1 - 13 Nov 2023
+Readme updated.
+Icon updated.
+
+7.0.0 - 18 Nov 2023
+Removed PaginatedQuery as useless.
+Updated version to correlate with .NET version.
+
+8.0.0 - 18 Nov 2023
+Added support for .NET 8.
+
+8.0.1 - 24 Nov 2023
+Fixed unhandled exception on .NET 8. System.TypeLoadException: GenericArguments[0], 'TCommnd', on 'MediatR.IRequestHandler`2[TRequest,TResponse]' violates the constraint of type parameter 'TRequest'.
+Upgrade packages.
+
+8.1.2 - 3 Apr 2024
+Added NoRegisterAutomaticallyAttribute to avoid register instance of class automatically in DI.
+Small fixes.
+Added sample project.
+
+8.2.0 - 16 Apr 2024
+Added IRequestFilter with Behaviour to filter request of query or command.
+Added IResultFilter with Behaviour to filter result of query or command.
+
+8.2.1 - 16 May 2024
+Add autobuild/push Nuget packets.
+
+8.2.2 - 16 May 2024
+Fix pipeline.
+
+8.3.0 - 03 Yul 2024
+Set the RequestFilterBehavior before the ValidationBehavior.
+
+8.3.1 - 23 Feb 2025
+Small internal refactoring.
+Fix build pipeline.
+
+9.1.0 - 04 Mar 2025
+Added CommandEventTypeEnum to define a type of Event, which should process event inside or outside of a transaction.
+Renamed EventQueueProcessBehavior into CommandEventQueueProcessBehavior, EventHandler into CommandEventHandler, EventQueue into CommandEventQueue, IEvent into ICommandEvent, IEventQueue into ICommandEventQueue, IEventQueueReader into ICommandEventQueueReader and IEventQueueWriter into ICommandEventQueueWriter.
+
+9.1.1 - 09 Mar 2025
+Add SonarCloud.
+
+9.1.2 - 09 Mar 2025
+Hotfix/add some examples.
+
+9.2.0 - 09 Mar 2025
+add ILogger on CommandEvent processing.
+
+10.0.1 - 13 Mar 2025
+Added ILogger into CommandEventHandler and CommandHandler and QueryHandler.
+
+10.1.0 - 13 Mar 2025
+Make ObjectExtensions.GetObjectSize() safe for some cases.
+
+10.1.1 - 17 Mar 2025
+Fix log field name.
+
+10.1.2 - 11 Apr 2025
+Fix log value for Command, Event, Query.
+
+10.1.3 - 14 Apr 2025
+Fix issue with logging of Command, EventCommand and Query objects.
+Optimize work with Stopwatch.
+Improve internal logging.
+
+10.1.4 - 10 Sep 2025
+1) Logging Improvements:
+   - Enhanced log message formatting (changed "for a {Elapsed} ms" to "in {Elapsed} ms")
+   - Optimized work with Stopwatch
+   - Improved internal logging
+2) Dependency Updates:
+   - FluentValidation upgraded to version 11.11.0
+3) Architectural Changes:
+   - Removed `AsyncRequestHandlerBase` class
+   - `CommandHandler<TCommand>` now directly implements `IRequestHandler<TCommand>`
+4) Code Optimizations:
+   - Simplified some methods
+   - Improved code formatting
+   - Refactoring for cleaner architecture

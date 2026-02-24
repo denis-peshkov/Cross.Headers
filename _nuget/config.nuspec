@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Cross.Headers</id>
+    <version>0.0.0</version>
+    <authors>Denis Peshkov</authors>
+    <owners>Denis Peshkov</owners>
+    <projectUrl>https://github.com/denis-peshkov/Cross.Headers</projectUrl>
+    <repository type="git" url="https://github.com/denis-peshkov/Cross.Headers.git" />
+    <description>ASP.NET Core middleware boilerplate for handling correlation id, security headers and user context based on configuration and OpenIdConnect authentication.</description>
+    <tags>.NET ASP.NET ASP.NETCore Middleware Headers Security CorrelationId CSP OpenIdConnect Configuration</tags>
+    <icon>icon.png</icon>
+    <readme>README.md</readme>
+    <copyright>Copyright Denis Peshkov</copyright>
+    <license type="file">LICENSE.md</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <dependencies>
+      <dependency id="Microsoft.AspNetCore.Authentication.OpenIdConnect" version="7.0.20" />
+      <dependency id="Microsoft.Extensions.Configuration.Binder" version="7.0.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Cross.Headers\bin\Release\net7.0\Cross.Headers*.*" target="lib\net7.0" />
+    <file src="..\Cross.Headers\bin\Release\net8.0\Cross.Headers*.*" target="lib\net8.0" />
+    <file src="..\LICENSE" target="" />
+    <file src="..\README.md" target="" />
+    <file src="..\icon.png" target="" />
+  </files>
+</package>
