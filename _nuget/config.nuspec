@@ -8,10 +8,13 @@
     <projectUrl>https://github.com/denis-peshkov/Cross.Headers</projectUrl>
     <repository type="git" url="https://github.com/denis-peshkov/Cross.Headers.git" />
     <description>ASP.NET Core middleware boilerplate for handling correlation id, security headers and user context based on configuration and OpenIdConnect authentication.</description>
-    <tags>.NET ASP.NET ASP.NETCore Middleware Headers Security CorrelationId CSP OpenIdConnect Configuration</tags>
-    <icon>icon.png</icon>
+    <tags>.NET ASP.NET ASP.NETCore Middleware Headers Security CorrelationId CSP OpenIdConnect Configuration UserContext</tags>
     <readme>README.md</readme>
-    <copyright>Copyright Denis Peshkov</copyright>
+    <icon>icon.png</icon>
+    <releaseNotes>
+      Initial version.
+    </releaseNotes>
+    <copyright>Copyright 2026 Denis Peshkov</copyright>
     <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <dependencies>
