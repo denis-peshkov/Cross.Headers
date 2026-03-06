@@ -1,7 +1,4 @@
-﻿using Cross.Headers.Constants;
-using Cross.Headers.Enums;
-
-namespace Cross.Headers.Middleware;
+﻿namespace Cross.Headers.Middleware;
 
 public class HeadersMiddleware
 {

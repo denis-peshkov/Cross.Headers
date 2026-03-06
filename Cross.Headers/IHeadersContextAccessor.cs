@@ -1,6 +1,4 @@
-﻿using Cross.Headers.Enums;
-
-namespace Cross.Headers;
+﻿namespace Cross.Headers;
 
 public interface IHeadersContextAccessor
 {
