@@ -1,4 +1,4 @@
-﻿namespace Cross.Headers.Middleware;
+namespace Cross.Headers.Middleware;
 
 public class HeadersMiddleware
 {
@@ -57,13 +57,13 @@ public class HeadersMiddleware
         {
             if (!httpContext.Response.Headers.ContainsKey(HeadersConstants.CorrelationId))
             {
-                httpContext.Response.Headers.Add(HeadersConstants.CorrelationId, correlationId.ToString());
+                httpContext.Response.Headers.TryAdd(HeadersConstants.CorrelationId, correlationId.ToString());
             }
 
             var whiteList = _configuration.GetValue<string>("CSPFrameAncestors")?.Split(",");
             if (whiteList is { Length: > 0 })
             {
-                httpContext.Response.Headers.Add("Content-Security-Policy", $"frame-ancestors {string.Join(" ", whiteList)}");
+                httpContext.Response.Headers.TryAdd("Content-Security-Policy", $"frame-ancestors {string.Join(" ", whiteList)}");
             }
 
             return Task.CompletedTask;
@@ -72,21 +72,42 @@ public class HeadersMiddleware
         await _next.Invoke(httpContext);
     }
 
-    private static T GetFirstHeaderValueOrDefault<T>(IReadOnlyDictionary<string, StringValues> headers, string headerKey)
+    private static bool TryGetHeaderValue<T>(IReadOnlyDictionary<string, StringValues> headers, string headerKey, out T value)
+    {
+        value = default!;
+        if (!headers.TryGetValue(headerKey.ToLower(), out var headerValues))
+            return false;
+        var valueString = headerValues.FirstOrDefault();
+        if (valueString == null)
+            return false;
+        try
+        {
+            value = typeof(T) == typeof(Guid)
+                ? (T)(object)Guid.Parse(valueString)
+                : (T)Convert.ChangeType(valueString, typeof(T));
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static T? GetFirstHeaderValueOrDefault<T>(IReadOnlyDictionary<string, StringValues> headers, string headerKey)
     {
         var toReturn = default(T);
 
         if (!headers.TryGetValue(headerKey.ToLower(), out var headerValues))
-        {
             return toReturn;
-        }
 
         var valueString = headerValues.FirstOrDefault();
         if (valueString != null)
         {
             try
             {
-                toReturn = (T)Convert.ChangeType(valueString, typeof(T));
+                toReturn = typeof(T) == typeof(Guid)
+                    ? (T)(object)Guid.Parse(valueString)
+                    : (T)Convert.ChangeType(valueString, typeof(T));
             }
             catch
             {
@@ -99,7 +120,6 @@ public class HeadersMiddleware
 
     private static Dictionary<string, StringValues> GetAllHeadersLowerCase(HttpContext httpContext)
         => httpContext.Request.Headers
-            .Select(x => x)
             .ToDictionary(x => x.Key.ToLower(), x => x.Value);
 
     private static UserAgentKindEnum GetUserAgentKind(HttpContext httpContext)

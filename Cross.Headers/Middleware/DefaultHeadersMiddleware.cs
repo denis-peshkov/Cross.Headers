@@ -20,7 +20,6 @@ public class DefaultHeadersMiddleware
         _configuration = configuration;
     }
 
-    [SuppressMessage("Usage", "CA2254:Template should be a static expression")]
     public async Task InvokeAsync(HttpContext httpContext, IHeadersContextAccessor headersContextAccessor)
     {
         ArgumentNullException.ThrowIfNull(httpContext);
@@ -42,7 +41,7 @@ public class DefaultHeadersMiddleware
         {
             var languageDefault = _configuration.GetValue<string>("LanguageDefault") ?? "EN";
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
-            _logger.LogTrace($"LanguageCode not set, setting to {languageDefault}");
+            _logger.LogTrace("LanguageCode not set, setting to {LanguageDefault}", languageDefault);
             headersContextAccessor.LanguageCode = languageDefault;
         }
 
@@ -50,7 +49,7 @@ public class DefaultHeadersMiddleware
         {
             var currencyDefault = _configuration.GetValue<string>("CurrencyDefault") ?? "USD";
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
-            _logger.LogTrace($"CurrencyCode not set, setting to {currencyDefault}");
+            _logger.LogTrace("CurrencyCode not set, setting to {CurrencyDefault}", currencyDefault);
             headersContextAccessor.CurrencyCode = currencyDefault;
         }
 

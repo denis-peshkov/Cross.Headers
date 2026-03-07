@@ -22,6 +22,8 @@ public class HeadersContextAccessor : IHeadersContextAccessor
 
     public string? UserAccessToken { get; set; }
 
+    public IReadOnlyCollection<Claim> UserClaims { get; set; } = Array.Empty<Claim>();
+
     public IReadOnlyCollection<string> UserPermissions { get; set; } = Array.Empty<string>();
 
     public IReadOnlyCollection<string> UserScopes { get; set; } = Array.Empty<string>();
