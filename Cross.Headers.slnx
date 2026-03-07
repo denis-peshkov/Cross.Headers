@@ -1,4 +1,4 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
     <File Path=".github\workflows\dotnet.yml" />
@@ -18,4 +18,5 @@
     <File Path="_nuget\config.nuspec" />
   </Folder>
   <Project Path="Cross.Headers\Cross.Headers.csproj" />
+  <Project Path="Cross.Headers.Tests\Cross.Headers.Tests.csproj" />
 </Solution>

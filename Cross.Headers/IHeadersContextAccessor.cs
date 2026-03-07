@@ -22,6 +22,8 @@ public interface IHeadersContextAccessor
 
     string? UserAccessToken { get; set; }
 
+    IReadOnlyCollection<Claim> UserClaims { get; set; }
+
     IReadOnlyCollection<string> UserPermissions { get; set; }
 
     IReadOnlyCollection<string> UserScopes { get; set; }
