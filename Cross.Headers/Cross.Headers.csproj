@@ -8,7 +8,7 @@
     <EnablePreviewFeatures>false</EnablePreviewFeatures>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <NoWarn>1701;1702;1591;CS8618;</NoWarn>
+    <NoWarn>1701;1702;1591;CS8618;NU1701;</NoWarn>
   </PropertyGroup>
 
   <Target Name="DeleteBinObjFolders" AfterTargets="Clean">
@@ -16,17 +16,35 @@
     <Delete Files=".\obj\**\*.cs" />
   </Target>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.25" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.35.0" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.20" Condition="'$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.24" Condition="'$(TargetFramework)' == 'net8.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.13" Condition="'$(TargetFramework)' == 'net9.0'" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.3" Condition="'$(TargetFramework)' == 'net10.0'" />
+  <!--
+    Microsoft.AspNetCore.Authentication.OpenIdConnect: major aligns with $(TargetFramework).
+    Microsoft.Extensions.Configuration.Binder: net6–8 share 8.0.x (as in Serilog.Sinks.ApplicationInsights.AspNetCore);
+    net9/net10 use the same patch line as that project for Extensions.Bind
+  -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>6.0.25</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>8.0.2</MicrosoftExtConfigurationBinderVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>7.0.20</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>8.0.2</MicrosoftExtConfigurationBinderVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>8.0.24</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>8.0.2</MicrosoftExtConfigurationBinderVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>9.0.13</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>9.0.14</MicrosoftExtConfigurationBinderVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>10.0.3</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>10.0.5</MicrosoftExtConfigurationBinderVersion>
+  </PropertyGroup>
 
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" Condition="'$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net7.0'" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.3" Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0'" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(MicrosoftExtConfigurationBinderVersion)" />
 
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>

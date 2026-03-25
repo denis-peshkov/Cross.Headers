@@ -1,14 +1,22 @@
-1.0.0 - 24 Feb 2026
+1.0.0 - 6 Mar 2026
 - Initial version.
 
 1.0.1 - 6 Mar 2026
+- Small fixes (#1).
 - README: added project description, AddHeaders registration example, middleware order documentation.
 - README: translated to English.
 - config.nuspec: updated tags, aligned description.
 
-1.0.2 - 7 Mar 2026
+1.1.0 - 7 Mar 2026
+- Add new target frameworks and update packages (#2).
 - PackageReference: framework-specific versions for net6.0–net10.0 (OpenIdConnect, Configuration.Binder).
 - config.nuspec: dependencies aligned with csproj for all target frameworks.
 - Cross.Headers.Tests: integration tests for middleware pipeline and IHeadersContextAccessor.
 - HeadersMiddleware: fixed Guid parsing from X-Correlation-Id header.
 - README: corrected middleware order (Headers → DefaultHeaders → UserHeaders).
+
+1.1.1 - 25 Mar 2026
+- Hotfix: small pipeline changes (#3).
+
+1.2.0 - 25 Mar 2026
+- Fix packages versions
