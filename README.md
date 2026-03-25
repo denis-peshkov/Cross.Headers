@@ -1,4 +1,19 @@
-# Cross.Headers [![Nuget](https://img.shields.io/nuget/v/Cross.Headers.svg)](https://nuget.org/packages/Cross.Headers/) [![Documentation](https://img.shields.io/badge/docs-wiki-yellow.svg)](https://github.com/denis-peshkov/Cross.Headers/wiki)
+[![License](https://img.shields.io/github/license/denis-peshkov/Cross.Headers)](LICENSE)
+[![GitHub Release Date](https://img.shields.io/github/release-date/denis-peshkov/Cross.Headers?label=released)](https://github.com/denis-peshkov/Cross.Headers/releases)
+[![NuGetVersion](https://img.shields.io/nuget/v/Cross.Headers.svg)](https://nuget.org/packages/Cross.Headers/)
+[![NugetDownloads](https://img.shields.io/nuget/dt/Cross.Headers.svg)](https://nuget.org/packages/Cross.Headers/)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Cross.Headers&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Cross.Headers)
+[![issues](https://img.shields.io/github/issues/denis-peshkov/Cross.Headers)](https://github.com/denis-peshkov/Cross.Headers/issues)
+[![.NET PR](https://github.com/denis-peshkov/Cross.Headers/actions/workflows/dotnet.yml/badge.svg?event=pull_request)](https://github.com/denis-peshkov/Cross.Headers/actions/workflows/dotnet.yml)
+
+![Size](https://img.shields.io/github/repo-size/denis-peshkov/Cross.Headers)
+[![GitHub contributors](https://img.shields.io/github/contributors/denis-peshkov/Cross.Headers)](https://github.com/denis-peshkov/Cross.Headers/contributors)
+[![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/denis-peshkov/Cross.Headers/latest?label=new+commits)](https://github.com/denis-peshkov/Cross.Headers/commits/master)
+![Activity](https://img.shields.io/github/commit-activity/w/denis-peshkov/Cross.Headers)
+![Activity](https://img.shields.io/github/commit-activity/m/denis-peshkov/Cross.Headers)
+![Activity](https://img.shields.io/github/commit-activity/y/denis-peshkov/Cross.Headers)
+
+# Cross.Headers
 
 ASP.NET Core middleware boilerplate for handling correlation id, security headers (CSP), and user context based on configuration and OpenIdConnect authentication. Provides `IHeadersContextAccessor` as a scoped service for request-scoped access to correlation id, system/business ids, language, currency, user-agent, and authenticated user data.
 
@@ -6,7 +21,7 @@ ASP.NET Core middleware boilerplate for handling correlation id, security header
 
 ## Install NuGet package
 
-Install the package _Cross.Headers_ [NuGet package](https://www.nuget.org/packages/Cross.Headers/) into your ASP.NET Core project:
+Install the _Cross.Headers_ [NuGet package](https://www.nuget.org/packages/Cross.Headers/) into your .NET project:
 
 ```powershell
 Install-Package Cross.Headers
