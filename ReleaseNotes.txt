@@ -1,3 +1,7 @@
+Release Notes - Serilog.Sinks.ApplicationInsights.AspNetCore
+
+https://github.com/denis-peshkov/Serilog.Sinks.ApplicationInsights.AspNetCore/releases
+
 1.0.0 - 6 Mar 2026
 - Initial version.
 
