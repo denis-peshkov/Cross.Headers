@@ -1,6 +1,6 @@
-Release Notes - Serilog.Sinks.ApplicationInsights.AspNetCore
+Release Notes - Cross.Headers
 
-https://github.com/denis-peshkov/Serilog.Sinks.ApplicationInsights.AspNetCore/releases
+https://github.com/denis-peshkov/Cross.Headers/releases
 
 v1.0.0 - 24 Feb 2026
 - Initial version.
