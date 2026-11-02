@@ -37,30 +37,36 @@ public class DefaultHeadersMiddleware
             headersContextAccessor.BusinessId = 1;
         }
 
-        if (headersContextAccessor.CountryCode == null)
+        if (string.IsNullOrWhiteSpace(headersContextAccessor.CountryCode))
         {
-            var countryDefault = _configuration.GetValue<string>("CountryDefault") ?? "US";
+            var countryDefault = ResolveDefault(_configuration, "CountryDefault", "US");
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
             _logger.LogTrace("CountryCode not set, setting to {CountryDefault}", countryDefault);
             headersContextAccessor.CountryCode = countryDefault;
         }
 
-        if (headersContextAccessor.LanguageCode == null)
+        if (string.IsNullOrWhiteSpace(headersContextAccessor.LanguageCode))
         {
-            var languageDefault = _configuration.GetValue<string>("LanguageDefault") ?? "EN";
+            var languageDefault = ResolveDefault(_configuration, "LanguageDefault", "EN");
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
             _logger.LogTrace("LanguageCode not set, setting to {LanguageDefault}", languageDefault);
             headersContextAccessor.LanguageCode = languageDefault;
         }
 
-        if (headersContextAccessor.CurrencyCode == null)
+        if (string.IsNullOrWhiteSpace(headersContextAccessor.CurrencyCode))
         {
-            var currencyDefault = _configuration.GetValue<string>("CurrencyDefault") ?? "USD";
+            var currencyDefault = ResolveDefault(_configuration, "CurrencyDefault", "USD");
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
             _logger.LogTrace("CurrencyCode not set, setting to {CurrencyDefault}", currencyDefault);
             headersContextAccessor.CurrencyCode = currencyDefault;
         }
 
         await _next(httpContext);
+    }
+
+    private static string ResolveDefault(IConfiguration configuration, string key, string fallback)
+    {
+        var value = configuration.GetValue<string>(key);
+        return string.IsNullOrWhiteSpace(value) ? fallback : value;
     }
 }

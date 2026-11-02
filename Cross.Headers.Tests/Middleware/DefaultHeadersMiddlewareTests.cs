@@ -82,6 +82,41 @@ public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
     }
 
     [Test]
+    public async Task ShouldApplyDefaults_WhenHeadersAreEmptyOrWhitespace()
+    {
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextAsync(host, configureRequest: req =>
+        {
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CountryCode, "   ");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.LanguageCode, "");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CurrencyCode, " \t ");
+        });
+        ctx.CountryCode.Should().Be("US");
+        ctx.LanguageCode.Should().Be("EN");
+        ctx.CurrencyCode.Should().Be("USD");
+    }
+
+    [Test]
+    public async Task ShouldApplyBuiltInFallbacks_WhenConfigDefaultsAreBlank()
+    {
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["CountryDefault"] = "  ",
+                ["LanguageDefault"] = "",
+                ["CurrencyDefault"] = null,
+                ["CSPFrameAncestors"] = "'self'"
+            })
+            .Build();
+
+        using var host = CreateHostWithConfig(config, Pipeline);
+        var ctx = await GetContextAsync(host);
+        ctx.CountryCode.Should().Be("US");
+        ctx.LanguageCode.Should().Be("EN");
+        ctx.CurrencyCode.Should().Be("USD");
+    }
+
+    [Test]
     public async Task ShouldSetCountryCodeToUs_WhenCountryDefaultMissing()
     {
         var config = new ConfigurationBuilder()
@@ -93,20 +128,22 @@ public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
             })
             .Build();
 
-        using var host = new HostBuilder()
+        using var host = CreateHostWithConfig(config, Pipeline);
+        var ctx = await GetContextAsync(host);
+        ctx.CountryCode.Should().Be("US");
+    }
+
+    private static IHost CreateHostWithConfig(IConfiguration config, Action<IApplicationBuilder> configurePipeline) =>
+        new HostBuilder()
             .ConfigureWebHost(web =>
             {
                 web.UseTestServer();
                 web.ConfigureServices(services =>
                 {
-                    services.AddSingleton<IConfiguration>(config);
+                    services.AddSingleton(config);
                     services.AddHeaders(config);
                 });
-                web.Configure(Pipeline);
+                web.Configure(configurePipeline);
             })
             .Build();
-
-        var ctx = await GetContextAsync(host);
-        ctx.CountryCode.Should().Be("US");
-    }
 }
