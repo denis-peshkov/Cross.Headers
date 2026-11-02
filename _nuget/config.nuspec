@@ -15,7 +15,7 @@
     <description>ASP.NET Core middleware boilerplate for handling correlation id, security headers and user context based on configuration and OpenIdConnect authentication.</description>
     <tags>.NET ASP.NET ASP.NETCore Middleware Headers Security CorrelationId CSP OpenIdConnect Configuration UserContext</tags>
     <releaseNotes>
-      Fix packages versions.
+      Added X-Country-Code / CountryCode and CountryDefault; README and tests updated.
     </releaseNotes>
     <dependencies>
       <group targetFramework="net6.0">

@@ -1,4 +1,4 @@
-namespace Cross.Headers.Tests.Middleware;
+﻿namespace Cross.Headers.Tests.Middleware;
 
 public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
 {
@@ -16,8 +16,9 @@ public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
         {
             accessor.SystemId,
             accessor.BusinessId,
+            accessor.CountryCode,
             accessor.LanguageCode,
-            accessor.CurrencyCode
+            accessor.CurrencyCode,
         });
     }
 
@@ -35,6 +36,14 @@ public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
         using var host = CreateHost(Pipeline);
         var ctx = await GetContextAsync(host);
         ctx.BusinessId.Should().Be(1);
+    }
+
+    [Test]
+    public async Task ShouldSetCountryCodeFromConfig_WhenNotProvided()
+    {
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextAsync(host);
+        ctx.CountryCode.Should().Be("US");
     }
 
     [Test]
@@ -61,12 +70,80 @@ public class DefaultHeadersMiddlewareTests : MiddlewareTestBase
         {
             req.Headers.TryAddWithoutValidation(HeadersConstants.SystemId, "10");
             req.Headers.TryAddWithoutValidation(HeadersConstants.BusinessId, "20");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CountryCode, "UA");
             req.Headers.TryAddWithoutValidation(HeadersConstants.LanguageCode, "RU");
             req.Headers.TryAddWithoutValidation(HeadersConstants.CurrencyCode, "RUB");
         });
         ctx.SystemId.Should().Be(10);
         ctx.BusinessId.Should().Be(20);
+        ctx.CountryCode.Should().Be("UA");
         ctx.LanguageCode.Should().Be("RU");
         ctx.CurrencyCode.Should().Be("RUB");
     }
+
+    [Test]
+    public async Task ShouldApplyDefaults_WhenHeadersAreEmptyOrWhitespace()
+    {
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextAsync(host, configureRequest: req =>
+        {
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CountryCode, "   ");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.LanguageCode, "");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CurrencyCode, " \t ");
+        });
+        ctx.CountryCode.Should().Be("US");
+        ctx.LanguageCode.Should().Be("EN");
+        ctx.CurrencyCode.Should().Be("USD");
+    }
+
+    [Test]
+    public async Task ShouldApplyBuiltInFallbacks_WhenConfigDefaultsAreBlank()
+    {
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["CountryDefault"] = "  ",
+                ["LanguageDefault"] = "",
+                ["CurrencyDefault"] = null,
+                ["CSPFrameAncestors"] = "'self'"
+            })
+            .Build();
+
+        using var host = CreateHostWithConfig(config, Pipeline);
+        var ctx = await GetContextAsync(host);
+        ctx.CountryCode.Should().Be("US");
+        ctx.LanguageCode.Should().Be("EN");
+        ctx.CurrencyCode.Should().Be("USD");
+    }
+
+    [Test]
+    public async Task ShouldSetCountryCodeToUs_WhenCountryDefaultMissing()
+    {
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["LanguageDefault"] = "EN",
+                ["CurrencyDefault"] = "USD",
+                ["CSPFrameAncestors"] = "'self'"
+            })
+            .Build();
+
+        using var host = CreateHostWithConfig(config, Pipeline);
+        var ctx = await GetContextAsync(host);
+        ctx.CountryCode.Should().Be("US");
+    }
+
+    private static IHost CreateHostWithConfig(IConfiguration config, Action<IApplicationBuilder> configurePipeline) =>
+        new HostBuilder()
+            .ConfigureWebHost(web =>
+            {
+                web.UseTestServer();
+                web.ConfigureServices(services =>
+                {
+                    services.AddSingleton(config);
+                    services.AddHeaders(config);
+                });
+                web.Configure(configurePipeline);
+            })
+            .Build();
 }

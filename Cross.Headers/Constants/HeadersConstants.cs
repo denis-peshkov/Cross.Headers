@@ -2,14 +2,22 @@
 
 public static class HeadersConstants
 {
+    /// <summary>Request correlation id (distributed tracing / logs).</summary>
     public static string CorrelationId => "X-Correlation-Id";
 
+    /// <summary>Caller system id (Admin / Clinic / Doctor / Patient).</summary>
     public static string SystemId => "X-System-Id";
 
+    /// <summary>Marketplace business entity id (legal/operational; not TenantId).</summary>
     public static string BusinessId => "X-Business-Id";
 
+    /// <summary>ISO 3166-1 alpha-2 country code (e.g. UA, US); not alpha-3 (UKR).</summary>
+    public static string CountryCode => "X-Country-Code";
+
+    /// <summary>ISO 639-1 language code (e.g. EN, RU, UK). Ukrainian = UK, not UA (ISO 3166 country).</summary>
     public static string LanguageCode => "X-Language-Code";
 
+    /// <summary>ISO 4217 currency code (e.g. EUR, USD).</summary>
     public static string CurrencyCode => "X-Currency-Code";
 
     public static string UserAgent => "User-Agent";

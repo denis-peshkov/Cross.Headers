@@ -8,6 +8,8 @@ public class HeadersContextAccessor : IHeadersContextAccessor
 
     public int BusinessId { get; set; }
 
+    public string? CountryCode { get; set; }
+
     public string? LanguageCode { get; set; }
 
     public string? CurrencyCode { get; set; }

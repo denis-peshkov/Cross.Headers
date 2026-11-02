@@ -1,4 +1,4 @@
-namespace Cross.Headers.Middleware;
+﻿namespace Cross.Headers.Middleware;
 
 public class HeadersMiddleware
 {
@@ -43,6 +43,7 @@ public class HeadersMiddleware
         headersContextAccessor.CorrelationId = correlationId;
         headersContextAccessor.SystemId = GetFirstHeaderValueOrDefault<int>(headers, HeadersConstants.SystemId);
         headersContextAccessor.BusinessId = GetFirstHeaderValueOrDefault<int>(headers, HeadersConstants.BusinessId);
+        headersContextAccessor.CountryCode = GetFirstHeaderValueOrDefault<string>(headers, HeadersConstants.CountryCode);
         headersContextAccessor.LanguageCode = GetFirstHeaderValueOrDefault<string>(headers, HeadersConstants.LanguageCode);
         headersContextAccessor.CurrencyCode = GetFirstHeaderValueOrDefault<string>(headers, HeadersConstants.CurrencyCode);
         headersContextAccessor.UserAgent = GetFirstHeaderValueOrDefault<string>(headers, HeadersConstants.UserAgent);

@@ -1,4 +1,4 @@
-namespace Cross.Headers.Tests.Middleware;
+﻿namespace Cross.Headers.Tests.Middleware;
 
 public class UserHeadersMiddlewareTests : MiddlewareTestBase
 {
@@ -22,9 +22,9 @@ public class UserHeadersMiddlewareTests : MiddlewareTestBase
                 claims.Add(new System.Security.Claims.Claim("sub", userId.ToString()));
                 claims.Add(new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, userId.ToString()));
             }
-            if (parts.Length >= 2)
+            if (parts.Length >= 2 && !string.IsNullOrEmpty(parts[1]))
                 claims.Add(new System.Security.Claims.Claim("username", parts[1]));
-            if (parts.Length >= 3)
+            if (parts.Length >= 3 && !string.IsNullOrEmpty(parts[2]))
             {
                 claims.Add(new System.Security.Claims.Claim("scope", parts[2]));
                 foreach (var scope in parts[2].Split(' ', StringSplitOptions.RemoveEmptyEntries))
@@ -84,11 +84,23 @@ public class UserHeadersMiddlewareTests : MiddlewareTestBase
     }
 
     [Test]
-    public async Task ShouldSetUserScopes_FromUserClaims()
+    public async Task ShouldSetUserScopes_FromPermissionClaims_WhenIsUser()
     {
         using var host = CreateHost(Pipeline);
         var ctx = await GetContextAsync(host, configureRequest: req =>
             req.Headers.TryAddWithoutValidation("X-Test-User", $"{Guid.NewGuid()}|user|read write admin"));
+        ctx.IsUser.Should().BeTrue();
+        ctx.UserScopes.Should().NotBeNull();
+        ctx.UserScopes.Should().BeEquivalentTo("read", "write", "admin");
+    }
+
+    [Test]
+    public async Task ShouldSetUserScopes_FromScopeClaim_WhenNotUser()
+    {
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextAsync(host, configureRequest: req =>
+            req.Headers.TryAddWithoutValidation("X-Test-User", $"{Guid.NewGuid()}||read write admin"));
+        ctx.IsUser.Should().BeFalse();
         ctx.UserScopes.Should().NotBeNull();
         ctx.UserScopes.Should().BeEquivalentTo("read", "write", "admin");
     }

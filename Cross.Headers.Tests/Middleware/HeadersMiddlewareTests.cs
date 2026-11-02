@@ -1,4 +1,4 @@
-namespace Cross.Headers.Tests.Middleware;
+﻿namespace Cross.Headers.Tests.Middleware;
 
 public class HeadersMiddlewareTests : MiddlewareTestBase
 {
@@ -16,6 +16,7 @@ public class HeadersMiddlewareTests : MiddlewareTestBase
             accessor.CorrelationId,
             accessor.SystemId,
             accessor.BusinessId,
+            accessor.CountryCode,
             accessor.LanguageCode,
             accessor.CurrencyCode,
             accessor.UserAgent,
@@ -43,6 +44,15 @@ public class HeadersMiddlewareTests : MiddlewareTestBase
     }
 
     [Test]
+    public async Task ShouldGenerateCorrelationId_WhenInvalid()
+    {
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextAsync(host, configureRequest: req =>
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CorrelationId, "not-a-guid"));
+        ctx.CorrelationId.Should().NotBe(Guid.Empty);
+    }
+
+    [Test]
     public async Task ShouldReadAllHeaders_FromRequest()
     {
         var correlationId = Guid.NewGuid();
@@ -52,14 +62,25 @@ public class HeadersMiddlewareTests : MiddlewareTestBase
             req.Headers.TryAddWithoutValidation(HeadersConstants.CorrelationId, correlationId.ToString());
             req.Headers.TryAddWithoutValidation(HeadersConstants.SystemId, "42");
             req.Headers.TryAddWithoutValidation(HeadersConstants.BusinessId, "100");
+            req.Headers.TryAddWithoutValidation(HeadersConstants.CountryCode, "UA");
             req.Headers.TryAddWithoutValidation(HeadersConstants.LanguageCode, "RU");
             req.Headers.TryAddWithoutValidation(HeadersConstants.CurrencyCode, "RUB");
         });
         ctx.CorrelationId.Should().Be(correlationId);
         ctx.SystemId.Should().Be(42);
         ctx.BusinessId.Should().Be(100);
+        ctx.CountryCode.Should().Be("UA");
         ctx.LanguageCode.Should().Be("RU");
         ctx.CurrencyCode.Should().Be("RUB");
+    }
+
+    [Test]
+    public async Task ShouldKeepAccessToken_WhenBearerPrefixMissing()
+    {
+        const string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test";
+        using var host = CreateHost(Pipeline);
+        var ctx = await GetContextFromRequestAsync(host, r => r.AddHeader(HeadersConstants.Authorization, token));
+        ctx.UserAccessToken.Should().Be(token);
     }
 
     [Test]

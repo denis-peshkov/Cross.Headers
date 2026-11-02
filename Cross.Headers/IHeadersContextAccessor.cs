@@ -8,6 +8,8 @@ public interface IHeadersContextAccessor
 
     int BusinessId { get; set; }
 
+    string? CountryCode { get; set; }
+
     string? LanguageCode { get; set; }
 
     string? CurrencyCode { get; set; }
