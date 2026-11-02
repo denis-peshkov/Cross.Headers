@@ -1,4 +1,4 @@
-namespace Cross.Headers.Tests;
+﻿namespace Cross.Headers.Tests;
 
 public abstract class MiddlewareTestBase
 {
@@ -6,6 +6,7 @@ public abstract class MiddlewareTestBase
         new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
+                ["CountryDefault"] = "US",
                 ["LanguageDefault"] = "EN",
                 ["CurrencyDefault"] = "USD",
                 ["CSPFrameAncestors"] = "'self'"
@@ -93,6 +94,7 @@ public abstract class MiddlewareTestBase
         public Guid CorrelationId { get; set; }
         public int SystemId { get; set; }
         public int BusinessId { get; set; }
+        public string? CountryCode { get; set; }
         public string? LanguageCode { get; set; }
         public string? CurrencyCode { get; set; }
         public string? UserAgent { get; set; }

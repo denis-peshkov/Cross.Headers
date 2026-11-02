@@ -17,7 +17,15 @@
 
 ASP.NET Core middleware boilerplate for handling correlation id, security headers (CSP), and user context based on configuration and OpenIdConnect authentication. Provides `IHeadersContextAccessor` as a scoped service for request-scoped access to correlation id, system/business ids, language, currency, user-agent, and authenticated user data.
 
-**Supported frameworks:** .NET 6, .NET 7, .NET 8, .NET 9, .NET 10
+**Target frameworks:** `net6.0`, `net7.0`, `net8.0`, `net9.0`, `net10.0`
+
+## Features
+
+- **`AddHeaders`** — registers `IHeadersContextAccessor` as scoped.
+- **`HeadersMiddleware`** — reads technical request headers into context and writes correlation id + CSP to the response.
+- **`DefaultHeadersMiddleware`** — applies defaults when headers are missing (`SystemId`, `BusinessId`, `CountryCode`, `LanguageCode`, `CurrencyCode`).
+- **`UserHeadersMiddleware`** — fills user id/name/scopes/claims from `HttpContext.User` (after authentication).
+- **`IHeadersContextAccessor.MapFrom`** — copies mapped context fields between accessors (including `UserClaims`).
 
 ## Install NuGet package
 
@@ -31,9 +39,22 @@ or
 dotnet add package Cross.Headers
 ```
 
+## Request headers
+
+| Header | Context property | Notes |
+| --- | --- | --- |
+| `X-Correlation-Id` | `CorrelationId` | Generated when missing or invalid |
+| `X-System-Id` | `SystemId` | Default `1` |
+| `X-Business-Id` | `BusinessId` | Default `1` |
+| `X-Country-Code` | `CountryCode` | ISO 3166-1 alpha-2 (e.g. `UA`, `US`); default from `CountryDefault` or `US` |
+| `X-Language-Code` | `LanguageCode` | ISO 639-1 (e.g. `EN`, `RU`, `UK`); Ukrainian language = `UK`, not `UA` |
+| `X-Currency-Code` | `CurrencyCode` | ISO 4217 (e.g. `EUR`, `USD`); default from `CurrencyDefault` or `USD` |
+| `User-Agent` | `UserAgent` / `UserAgentKind` | Detects Android/iOS app markers and mobile browsers |
+| `Authorization` | `UserAccessToken` | Optional `Bearer ` prefix is stripped |
+
 ## IHeadersContextAccessor
 
-`IHeadersContextAccessor` is registered as a scoped service. Inject it via DI anywhere in your application (controllers, services, middleware) to access request-scoped context populated by the middleware pipeline. Within a single HTTP request, the same instance is shared across all consumers, so you get consistent correlation id, user data, and header-derived values for the entire request lifecycle.
+`IHeadersContextAccessor` is registered as a scoped service. Inject it via DI anywhere in your application (controllers, services, middleware) to access request-scoped context populated by the middleware pipeline. Within a single HTTP request, the same instance is shared across all consumers.
 
 ```csharp
 public interface IHeadersContextAccessor
@@ -41,6 +62,7 @@ public interface IHeadersContextAccessor
     Guid CorrelationId { get; set; }
     int SystemId { get; set; }
     int BusinessId { get; set; }
+    string? CountryCode { get; set; }
     string? LanguageCode { get; set; }
     string? CurrencyCode { get; set; }
     string? UserAgent { get; set; }
@@ -59,15 +81,22 @@ public interface IHeadersContextAccessor
 
 ### Services registration
 
-The recommended way to register services is to use the `AddHeaders` extension:
-
 ```csharp
 builder.Services.AddHeaders(builder.Configuration);
 ```
 
-The `AddHeaders` method registers `IHeadersContextAccessor` as a scoped service and prepares the infrastructure for the middleware pipeline.
+`AddHeaders` registers `IHeadersContextAccessor` as a scoped service.
 
-Also ensure that you configure OpenIdConnect authentication and set the `LanguageDefault`, `CurrencyDefault`, and `CSPFrameAncestors` values in your configuration.
+Also configure OpenIdConnect authentication and set defaults in configuration:
+
+```json
+{
+  "CountryDefault": "US",
+  "LanguageDefault": "EN",
+  "CurrencyDefault": "USD",
+  "CSPFrameAncestors": "'self'"
+}
+```
 
 ### Configure middleware
 
@@ -81,13 +110,28 @@ app.UseCors("UI");
 app.UseMiddleware<HeadersMiddleware>();
 app.UseMiddleware<DefaultHeadersMiddleware>();
 
-app.UseAuthentication();  // should be before UseMvc() call
+app.UseAuthentication();  // should be before UseMvc() / MapControllers()
 app.UseMiddleware<UserHeadersMiddleware>();
-app.UseAuthorization();   // should be before UseMvc() call
+app.UseAuthorization();   // should be before UseMvc() / MapControllers()
 ```
 
 **Cross.Headers middleware:**
 
-- `HeadersMiddleware` — reads technical headers (correlation id, system/business id, language, currency, user-agent, access token, etc.), builds the main context, and adds technical headers to the response (e.g., correlation id and CSP).
-- `DefaultHeadersMiddleware` — fills default values in `IHeadersContextAccessor` when headers are missing (SystemId, BusinessId, LanguageCode, CurrencyCode, etc.).
-- `UserHeadersMiddleware` — uses the already populated access token/claims and extracts user data from `HttpContext.User` (Id, UserName, IsUser flag, scopes, etc.), writing it to `IHeadersContextAccessor`.
+- `HeadersMiddleware` — reads technical headers (correlation id, system/business/country id, language, currency, user-agent, access token, etc.), builds the main context, and adds technical headers to the response (correlation id and CSP).
+- `DefaultHeadersMiddleware` — fills default values in `IHeadersContextAccessor` when headers are missing (`SystemId`, `BusinessId`, `CountryCode`, `LanguageCode`, `CurrencyCode`).
+- `UserHeadersMiddleware` — extracts user data from `HttpContext.User` (`UserId`, `UserName`, `IsUser`, scopes/permissions, claims) into `IHeadersContextAccessor`.
+
+## Release notes
+
+See [ReleaseNotes.txt](ReleaseNotes.txt) and [GitHub Releases](https://github.com/denis-peshkov/Cross.Headers/releases).
+
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/your-change`).
+3. Commit your changes with a clear message.
+4. Push the branch and open a pull request.
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

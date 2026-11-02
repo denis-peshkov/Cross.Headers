@@ -37,6 +37,14 @@ public class DefaultHeadersMiddleware
             headersContextAccessor.BusinessId = 1;
         }
 
+        if (headersContextAccessor.CountryCode == null)
+        {
+            var countryDefault = _configuration.GetValue<string>("CountryDefault") ?? "US";
+            // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+            _logger.LogTrace("CountryCode not set, setting to {CountryDefault}", countryDefault);
+            headersContextAccessor.CountryCode = countryDefault;
+        }
+
         if (headersContextAccessor.LanguageCode == null)
         {
             var languageDefault = _configuration.GetValue<string>("LanguageDefault") ?? "EN";

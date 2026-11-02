@@ -22,3 +22,9 @@ v1.1.1 - 25 Mar 2026
 
 v1.2.0 - 25 Mar 2026
 - Fix packages versions.
+
+v1.3.0 - (unreleased)
+- Added X-Country-Code / CountryCode and CountryDefault (default US).
+- MapFrom: also copies UserClaims.
+- README: target frameworks, package dependency table, request headers table, Features / Contributing / License.
+- Tests: CountryCode coverage, MapFrom, AddHeaders, UserScopes for non-user, invalid correlation id.

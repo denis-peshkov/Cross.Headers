@@ -38,8 +38,8 @@
     <MicrosoftExtConfigurationBinderVersion>9.0.14</MicrosoftExtConfigurationBinderVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>10.0.3</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
-    <MicrosoftExtConfigurationBinderVersion>10.0.5</MicrosoftExtConfigurationBinderVersion>
+    <MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>10.0.14</MicrosoftAspNetCoreAuthenticationOpenIdConnectVersion>
+    <MicrosoftExtConfigurationBinderVersion>10.0.14</MicrosoftExtConfigurationBinderVersion>
   </PropertyGroup>
 
   <ItemGroup>
